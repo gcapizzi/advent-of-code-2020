@@ -10,7 +10,7 @@
 %% escript Entry point
 main(Args) ->
     Path = lists:nth(1, Args),
-    Nums = lists:map(fun binstr_to_int/1, lines(Path)),
+    Nums = lists:map(fun list_to_integer/1, utils:file_lines(Path)),
 
     Pairs = pairs(Nums),
     {value, {X1, Y1}} = lists:search(fun({X, Y}) -> X + Y =:= 2020 end, Pairs),
@@ -26,15 +26,8 @@ main(Args) ->
 %% Internal functions
 %%====================================================================
 
-lines(Path) ->
-    {ok, Data} = file:read_file(Path),
-    string:split(string:trim(Data), "\n", all).
-
 pairs(List) ->
     [{X, Y} || X <- List, Y <- List, X < Y].
 
 triples(List) ->
     [{X, Y, Z} || X <- List, Y <- List, Z <- List, X < Y, Y < Z].
-
-binstr_to_int(BinStr) ->
-    list_to_integer(binary_to_list(BinStr)).

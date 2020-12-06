@@ -10,7 +10,7 @@
 %% escript Entry point
 main(Args) ->
     Path = lists:nth(1, Args),
-    Lines = lines(Path),
+    Lines = utils:file_lines(Path),
 
     N1 = count_trees(Lines, 1, 1),
     N2 = count_trees(Lines, 3, 1),
@@ -24,10 +24,6 @@ main(Args) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
-
-lines(Path) ->
-    {ok, Data} = file:read_file(Path),
-    lists:map(fun binary_to_list/1, string:split(string:trim(Data), "\n", all)).
 
 count_trees(Lines, XInc, YInc) ->
     Xs = lists:seq(1, XInc * length(Lines), XInc),

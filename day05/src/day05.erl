@@ -10,7 +10,7 @@
 %% escript Entry point
 main(Args) ->
     Path = lists:nth(1, Args),
-    Lines = lines(Path),
+    Lines = utils:file_lines(Path),
     SeatIds = lists:map(fun seat_id/1, Lines),
     io:format("Highest Seat ID: ~p~n", [lists:max(SeatIds)]),
     io:format("Your Seat ID: ~p~n", [find_hole(SeatIds)]),
@@ -19,10 +19,6 @@ main(Args) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
-
-lines(Path) ->
-    {ok, Data} = file:read_file(Path),
-    lists:map(fun binary_to_list/1, string:split(string:trim(Data), "\n", all)).
 
 find_seat(Str) ->
     {{Row, _}, {Col, _}} = lists:foldl(fun(Char, {{RowMin, RowMax}, {ColMin, ColMax}}) ->
