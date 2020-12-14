@@ -33,22 +33,22 @@ parse_instruction("mem[" ++ Rest) ->
 apply_mask(Mask, Value) ->
     ValueBin = lists:concat(string:pad(integer_to_list(Value, 2), 36, leading, $0)),
     NewValueBin = lists:zipwith(fun(M, V) ->
-                          case M of
-                              $X -> V;
-                              _ -> M
-                          end
-                  end, Mask, ValueBin),
+                                        case M of
+                                            $X -> V;
+                                            _ -> M
+                                        end
+                                end, Mask, ValueBin),
     list_to_integer(NewValueBin, 2).
 
 run_instructions(Instructions, Memory) ->
     {_, NewMemory} = lists:foldl(fun(Inst, {Msk, Mem}) ->
-                        case Inst of
-                            {mask, NewMask} -> {NewMask, Mem};
-                            {mem, Address, Value} -> {Msk, array:set(Address, apply_mask(Msk, Value), Mem)}
-                        end
-                end,
-                {"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", Memory},
-                Instructions),
+                                         case Inst of
+                                             {mask, NewMask} -> {NewMask, Mem};
+                                             {mem, Address, Value} -> {Msk, array:set(Address, apply_mask(Msk, Value), Mem)}
+                                         end
+                                 end,
+                                 {"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", Memory},
+                                 Instructions),
     NewMemory.
 
 run_instructions_v2(Instructions, Memory) ->
@@ -69,12 +69,12 @@ run_instructions_v2(Instructions, Memory) ->
 apply_mask_v2(Mask, Value) ->
     ValueBin = pad_bin(integer_to_list(Value, 2), 36),
     NewValueBin = lists:zipwith(fun(M, V) ->
-                          case M of
-                              $0 -> V;
-                              $1 -> $1;
-                              _ -> $X
-                          end
-                  end, Mask, ValueBin),
+                                        case M of
+                                            $0 -> V;
+                                            $1 -> $1;
+                                            _ -> $X
+                                        end
+                                end, Mask, ValueBin),
     NumOfFloating = length(lists:filter(fun(C) -> C =:= $X end, NewValueBin)),
     RangeBin = lists:map(fun(N) -> pad_bin(integer_to_list(N, 2), NumOfFloating) end, lists:seq(0, pow(2, NumOfFloating) - 1)),
     lists:map(fun(B) -> list_to_integer(replaceXs(NewValueBin, B)) end, RangeBin).

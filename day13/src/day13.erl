@@ -31,11 +31,11 @@ crt(AsAndMs) ->
     {_, Ms} = lists:unzip(AsAndMs),
     M = lists:foldl(fun(Mi, M) -> Mi * M end, 1, Ms),
     Res = lists:foldr(fun({Ai, Mi}, Res) ->
-                        Zi = M div Mi,
-                        Yi = mod_inv(Zi, Mi),
-                        Wi = mod((Yi * Zi), M),
-                        Res + Ai * Wi
-                end, 0, AsAndMs),
+                              Zi = M div Mi,
+                              Yi = mod_inv(Zi, Mi),
+                              Wi = mod((Yi * Zi), M),
+                              Res + Ai * Wi
+                      end, 0, AsAndMs),
     mod(Res, M).
 
 mod_inv(N, Mod) ->

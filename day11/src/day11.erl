@@ -97,10 +97,10 @@ count_taken(Board) ->
 
 visibles(Coord, Board) ->
     Cells = lists:map(fun(Dir) ->
-                      Line = line(Dir, Coord, Board),
-                      LineCells = lists:map(fun(C) -> get_cell(C, Board) end, Line),
-                      search(fun(C) -> (C =:= free) or (C =:= taken) end, LineCells)
-              end, [n, ne, e, se, s, sw, w, nw]),
+                              Line = line(Dir, Coord, Board),
+                              LineCells = lists:map(fun(C) -> get_cell(C, Board) end, Line),
+                              search(fun(C) -> (C =:= free) or (C =:= taken) end, LineCells)
+                      end, [n, ne, e, se, s, sw, w, nw]),
     reject_undefined(Cells).
 
 line(n, {RowN, ColN}, _) -> zipmin(lists:seq(RowN - 1, 0, -1), repeat(RowN, ColN));

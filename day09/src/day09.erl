@@ -32,14 +32,14 @@ pairs(List) ->
 find_invalid_num(Numbers, PreambleSize) ->
     Is = lists:seq(1, length(Numbers) - PreambleSize - 1),
     Res = lists:search(fun(I) ->
-                        Preamble = lists:sublist(Numbers, I, PreambleSize),
-                        N = lists:nth(I + PreambleSize, Numbers),
-                        Pair = find_sum_pair(N, Preamble),
-                        case Pair of
-                            {value, _} -> false;
-                            _ -> true
-                        end
-                end, Is),
+                               Preamble = lists:sublist(Numbers, I, PreambleSize),
+                               N = lists:nth(I + PreambleSize, Numbers),
+                               Pair = find_sum_pair(N, Preamble),
+                               case Pair of
+                                   {value, _} -> false;
+                                   _ -> true
+                               end
+                       end, Is),
     case Res of
         {value, N} -> {value, lists:nth(N + PreambleSize, Numbers)};
         _ -> false
